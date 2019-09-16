@@ -17,6 +17,7 @@ def getChiSquareValue(bigram):
     chiSquare[1][1] = chiSquare[2][1] - chiSquare[0][1]
     chiSquare[1][2] = chiSquare[2][2] - chiSquare[0][2]
     
+    # Modified chi square equation for a 2x2 matrix
     numerator = chiSquare[2][2] * pow((chiSquare[0][0] * chiSquare[1][1]) - (chiSquare[0][1] * chiSquare[1][0]), 2)
     denominator = (chiSquare[0][0] + chiSquare[0][1]) * (chiSquare[0][0] + chiSquare[1][0]) * (chiSquare[0][1] + chiSquare[1][1]) * (chiSquare[1][0] + chiSquare[1][1])
 
@@ -30,16 +31,21 @@ tokenData = json.loads(open(sys.argv[1], 'r').read())
 
 collocations = {}
 for key, value in tokenData['bigramFrequency'].items():
+    # Only calculate the chi value if the bigram has appeared more than 5 times.
     if value > 5:
         collocations[key] = getChiSquareValue(key)
 
-collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:100])
+# To sort the collocations, convert the hash table to tuples, sort, get the top 25 collocations, and then covert it back to a hash table.
+collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:25])
+# convert the bigrams to tuples
 bigrams = [(k, v) for k, v in tokenData['bigramFrequency'].items()]
 
+# Create a hash table with the top 25 bigrams and collocations
 collocationData = {
-    'bigrams': collections.OrderedDict(bigrams[:100]),
+    'bigrams': collections.OrderedDict(bigrams[:25]),
     'collocations': collocations
 }
 
+# write the hash table to a JSON file
 with open(sys.argv[2] + '_collocation_data.json', 'w') as file:
     file.write(json.dumps(collocationData, indent=4))
