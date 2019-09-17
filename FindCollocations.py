@@ -35,17 +35,34 @@ for key, value in tokenData['bigramFrequency'].items():
     if value > 5:
         collocations[key] = getChiSquareValue(key)
 
-# To sort the collocations, convert the hash table to tuples, sort, get the top 25 collocations, and then covert it back to a hash table.
+# To sort the collocations, convert the hash table to tuples, sort, get the top 100 collocations, and then covert it back to a hash table.
 collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:100])
 # convert the bigrams to tuples
-bigrams = [(k, v) for k, v in tokenData['bigramFrequency'].items()]
+bigrams = collections.OrderedDict([(k, v) for k, v in tokenData['bigramFrequency'].items()][:100])
 
 # Create a hash table with the top 25 bigrams and collocations
 collocationData = {
-    'bigrams': collections.OrderedDict(bigrams[:100]),
+    'bigrams': bigrams,
     'collocations': collocations
 }
 
 # write the hash table to a JSON file
 with open(sys.argv[2] + '_collocation_data.json', 'w') as file:
     file.write(json.dumps(collocationData, indent=4))
+
+print('bigrams')
+print('------------------------------------')
+i = 0
+for key, value in bigrams.items():
+    if i < 25:
+        print(key + ': ' + str(value))
+        i += 1
+
+i = 0
+print('\ncollocations')
+print('------------------------------------')
+for key, value in collocations.items():
+    if i < 25:
+        print(key + ': ' + str(value))
+        i += 1
+
