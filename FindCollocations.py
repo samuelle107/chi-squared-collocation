@@ -36,13 +36,13 @@ for key, value in tokenData['bigramFrequency'].items():
         collocations[key] = getChiSquareValue(key)
 
 # To sort the collocations, convert the hash table to tuples, sort, get the top 25 collocations, and then covert it back to a hash table.
-collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:25])
+collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:100])
 # convert the bigrams to tuples
 bigrams = [(k, v) for k, v in tokenData['bigramFrequency'].items()]
 
 # Create a hash table with the top 25 bigrams and collocations
 collocationData = {
-    'bigrams': collections.OrderedDict(bigrams[:25]),
+    'bigrams': collections.OrderedDict(bigrams[:100]),
     'collocations': collocations
 }
 
