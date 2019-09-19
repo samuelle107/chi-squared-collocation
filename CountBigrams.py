@@ -1,20 +1,20 @@
 import collections
 import json
 import nltk
-nltk.download('stopwords')
-nltk.download('punkt')
-from nltk.corpus import stopwords
 import string
 import sys
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+nltk.download('punkt')
 
-if (len(sys.argv) != 3):
+if len(sys.argv) != 3:
     print('Enter the file name as the first arguement and the output file as the second arguement.')
     sys.exit()
 
-stopword = stopwords.words('english')
-
 # Remove the residual HTML, remove punctuation, remove digits, convert to lowercase
 text = open(sys.argv[1], 'r').read().replace('&quot', '').translate(str.maketrans('', '', string.punctuation)).translate(str.maketrans('', '', string.digits)).lower()
+
+stopword = stopwords.words('english')
 
 tokenList = nltk.word_tokenize(text)
 # Add words to tokens if the current token is not a stopword

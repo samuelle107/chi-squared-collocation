@@ -2,6 +2,7 @@ import collections
 import json
 import sys
 
+
 def getChiSquareValue(bigram):
     words = bigram.split()
 
@@ -23,7 +24,8 @@ def getChiSquareValue(bigram):
 
     return numerator / denominator
 
-if (len(sys.argv) != 3):
+
+if len(sys.argv) != 3:
     print('Enter the file name as the first arguement and the output file as the second arguement.')
     sys.exit()
 
@@ -35,10 +37,11 @@ for key, value in tokenData['bigramFrequency'].items():
     if value > 5:
         collocations[key] = getChiSquareValue(key)
 
-# To sort the collocations, convert the hash table to tuples, sort, get the top 100 collocations, and then covert it back to a hash table.
-collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True)[:100])
+# To sort the collocations, convert the hash table to tuples, sort,
+# get the top 100 collocations, and then covert it back to a hash table.
+collocations = collections.OrderedDict(sorted(collocations.items(), key=lambda kv: kv[1], reverse=True))
 # convert the bigrams to tuples
-bigrams = collections.OrderedDict([(k, v) for k, v in tokenData['bigramFrequency'].items()][:100])
+bigrams = collections.OrderedDict([(k, v) for k, v in tokenData['bigramFrequency'].items()])
 
 # Create a hash table with the top 25 bigrams and collocations
 collocationData = {
@@ -65,4 +68,3 @@ for key, value in collocations.items():
     if i < 25:
         print(key + ': ' + str(value))
         i += 1
-
